@@ -23,8 +23,10 @@ post '/' do
 
   # Split command text
   logger.info(params['text'])
-  text_parts = params['text'].split(' ')
-
+  puts params['text']
+  puts params
+  #text_parts = params['text'].split(' ')
+  text_parts =["rc_bot_dump","MONIKER=api","TARGET=dev"]
   # Split command text - job
   job = text_parts[0]
 
