@@ -34,23 +34,7 @@ post '/' do
   job = text_parts[0]
 
   # Split command text - parameters
-  parameters = []
-  lnth = text_parts.length
-  puts lnth
-  puts "Entering while loop"
-  if text_parts.length > 1
-    i=1
-    while i<lnth
-      puts text_parts[i]
-      ptext = text_parts[i]
-      p_thing = ptext.split('=')
-      puts p_thing
-      parameters << { :name => p_thing[0], :value => p_thing[1] }
-      i = i+1
-      puts i
-    end
-  end
-  puts "continuing"
+  parameters = text_parts[1:].map(&:inspect).join('&')
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
   logger.info( jenkins_job_url) #debug
@@ -63,13 +47,13 @@ post '/' do
   next_build_number = resp_json['nextBuildNumber']
   logger.info( next_build_number ) #debug
   # Make jenkins request
-  json = JSON.generate( {:parameter => parameters} )
-  logger.info( json) #debug
-  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}")#debug
-  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}", :json => json
-
+  # json = JSON.generate( {:parameter => parameters} )
+  # logger.info( json) #debug
+  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
+  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}"
+  puts resp
   # Build url
-  build_url = "#{jenkins_job_url}/#{next_build_number}"
+  build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
 
   slack_webhook_url = ENV['SLACK_WEBHOOK_URL']
   if slack_webhook_url
