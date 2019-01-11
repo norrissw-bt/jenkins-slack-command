@@ -49,7 +49,7 @@ post '/' do
   resp_json = JSON.parse( resp.body )
   logger.info( resp_json) #debug
   next_build_number = resp_json['nextBuildNumber']
-  logger.info( next_build_number #debug
+  logger.info( next_build_number ) #debug
   # Make jenkins request
   json = JSON.generate( {:parameter => parameters} )
   logger.info( json) #debug
