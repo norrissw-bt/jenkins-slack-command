@@ -18,6 +18,7 @@ post '/' do
   #return [401, "No authorized for this command,token:" + slack_token] unless slack_token == params['token']
 
   # Split command text
+  puts params['text']
   text_parts = params['text'].split(' ')
 
   # Split command text - job
