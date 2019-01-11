@@ -26,22 +26,26 @@ post '/' do
   logger.info(params['text'])
   puts params['text']
   puts params
-  #text_parts = params['text'].split(' ')
-  text_parts =["rc_bot_dump","MONIKER=api","TARGET=dev"]
+  args = params['text']
+  text_parts = args.split(' ')
+  puts "args", args
+  puts "text_parts", text_parts
   # Split command text - job
   job = text_parts[0]
 
   # Split command text - parameters
   parameters = []
-  lnth = text_parts.size
-  if text_parts.size > 1
+  lnth = text_parts.length
+  puts lnth
+  puts "Entering while loop"
+  if text_parts.length > 1
     i=1
     while i<=lnth
       p_thing = text_parts[i].split('=')
       parameters << { :name => p_thing[0], :value => p_thing[1] }
     end
   end
-
+  puts "continuing"
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
   logger.info( jenkins_job_url) #debug
