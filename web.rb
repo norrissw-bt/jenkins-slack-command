@@ -25,25 +25,31 @@ post '/' do
 
   # Split command text - parameters
   parameters = []
+  lnth = text_parts.size
   if text_parts.size > 1
-    all_params = text_parts[1..-1]
-    all_params.each do |p|
-      p_thing = p.split('=')
+    i=1
+    while i<=lnth
+      p_thing = text_parts[i].split('=')
       parameters << { :name => p_thing[0], :value => p_thing[1] }
     end
   end
 
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
+  puts jenkins_job_url #debug
 
   # Get next jenkins job build number
   resp = RestClient.get "#{jenkins_job_url}/api/json"
+  puts resp #debug
   resp_json = JSON.parse( resp.body )
+  puts resp_json #debug
   next_build_number = resp_json['nextBuildNumber']
-
+  puts next_build_number #debug
   # Make jenkins request
   json = JSON.generate( {:parameter => parameters} )
-  resp = RestClient.post "#{jenkins_job_url}/build?token=#{jenkins_token}", :json => json
+  puts json #debug
+  puts "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}" #debug
+  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}", :json => json
 
   # Build url
   build_url = "#{jenkins_job_url}/#{next_build_number}"
