@@ -41,7 +41,10 @@ post '/' do
   if text_parts.length > 1
     i=1
     while i<=lnth
-      p_thing = text_parts[i].split('=')
+      puts text_parts[i]
+      ptext = text_parts[i]
+      p_thing = ptext.split('=')
+      puts p_thing
       parameters << { :name => p_thing[0], :value => p_thing[1] }
       i = i+1
     end
