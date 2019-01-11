@@ -1,16 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    json (1.8.2)
-    mime-types (1.25.1)
-    rack (1.6.0)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
+    domain_name (0.5.20180417)
+      unf (>= 0.0.5, < 1.0.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    json (2.1.0)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
+    netrc (0.11.0)
+    rack (1.6.11)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
-    slack-notifier (1.1.0)
+    slack-notifier (2.3.2)
     tilt (1.4.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.5)
 
 PLATFORMS
   ruby
@@ -20,3 +32,6 @@ DEPENDENCIES
   rest-client
   sinatra (= 1.1.0)
   slack-notifier
+
+BUNDLED WITH
+   2.0.1
