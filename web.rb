@@ -3,6 +3,7 @@ require 'rest-client'
 require 'json'
 require 'slack-notifier'
 require 'logger'
+$stdout.sync = true
 
 logger = Logger.new(STDOUT)
 logger.level = Logger::DEBUG
