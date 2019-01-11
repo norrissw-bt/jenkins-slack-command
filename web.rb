@@ -15,7 +15,7 @@ post '/' do
   return [403, "No jenkins token setup"] unless jenkins_token= ENV['JENKINS_TOKEN']
 
   # Verify slack token matches environment variable
-  return [401, "No authorized for this command,token:" + slack_token] unless slack_token == params['token']
+  #return [401, "No authorized for this command,token:" + slack_token] unless slack_token == params['token']
 
   # Split command text
   text_parts = params['text'].split(' ')
