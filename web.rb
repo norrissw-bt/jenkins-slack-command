@@ -2,6 +2,10 @@ require 'sinatra'
 require 'rest-client'
 require 'json'
 require 'slack-notifier'
+require 'logger'
+
+logger = Logger.new(STDOUT)
+logger.level = Logger::DEBUG
 
 get '/' do
   "This is a thing"
@@ -18,7 +22,7 @@ post '/' do
   #return [401, "No authorized for this command,token:" + slack_token] unless slack_token == params['token']
 
   # Split command text
-  puts params['text']
+  logger.info(params['text'])
   text_parts = params['text'].split(' ')
 
   # Split command text - job
@@ -37,19 +41,19 @@ post '/' do
 
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
-  puts jenkins_job_url #debug
+  logger.info( jenkins_job_url) #debug
 
   # Get next jenkins job build number
   resp = RestClient.get "#{jenkins_job_url}/api/json"
-  puts resp #debug
+  logger.info( resp) #debug
   resp_json = JSON.parse( resp.body )
-  puts resp_json #debug
+  logger.info( resp_json) #debug
   next_build_number = resp_json['nextBuildNumber']
-  puts next_build_number #debug
+  logger.info( next_build_number #debug
   # Make jenkins request
   json = JSON.generate( {:parameter => parameters} )
-  puts json #debug
-  puts "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}" #debug
+  logger.info( json) #debug
+  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}")#debug
   resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}", :json => json
 
   # Build url
