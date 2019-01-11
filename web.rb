@@ -49,8 +49,8 @@ post '/' do
   # Make jenkins request
   json = JSON.generate( { "" => "" } )
   logger.info( json) #debug
-  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
-  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}", :json => json
+  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''))#debug
+  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''), :json => json
   puts resp
   # Build url
   build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
