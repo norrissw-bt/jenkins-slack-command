@@ -34,7 +34,7 @@ post '/' do
   job = text_parts[0]
 
   # Split command text - parameters
-  parameters = text_parts[1:].map(&:inspect).join('&')
+  parameters = text_parts[1..-1].map(&:inspect).join('&')
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
   logger.info( jenkins_job_url) #debug
