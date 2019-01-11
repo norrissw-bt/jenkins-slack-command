@@ -43,6 +43,7 @@ post '/' do
     while i<=lnth
       p_thing = text_parts[i].split('=')
       parameters << { :name => p_thing[0], :value => p_thing[1] }
+      i = i+1
     end
   end
   puts "continuing"
