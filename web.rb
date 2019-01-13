@@ -70,6 +70,7 @@ post '/' do
       notifier.ping "Started job '#{job}' - #{build_url} with parameters: #{parameters} for #{user_name}"
     else
       notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
+    end
   end
 
   build_url
