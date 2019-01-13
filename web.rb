@@ -29,17 +29,17 @@ post '/' do
 
   # Slice out the job name
   job = text_parts[0]
-
+  if text_parts.size > 1 
   #format parameters (all our parameters need to be capitalize like MONIKER=abc)
-  formatted_params = []
-  #Skip the job name and the capitalize the variable names
-  text_parts[1..-1].each{ |p|  var = /(.*=)/.match(p)[0].upcase 
-                 par = /=(.*)/.match(p)[0]
-                 formatted_params << var + par.tr('=','') }
+    formatted_params = []
+    #Skip the job name and the capitalize the variable names
+    text_parts[1..-1].each{ |p|  var = /(.*=)/.match(p)[0].upcase 
+                   par = /=(.*)/.match(p)[0]
+                   formatted_params << var + par.tr('=','') }
 
-  # Split command text - parameters
-  parameters = formatted_params.map(&:inspect).join('&').tr('"','')
-
+    # Split command text - parameters
+    parameters = formatted_params.map(&:inspect).join('&').tr('"','')
+  end
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
   #logger.info( jenkins_job_url) #debug
@@ -54,8 +54,11 @@ post '/' do
   json = JSON.generate( { "" => "" } )
 
   logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
-  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}", :json => json
-
+  if parameters
+    resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}", :json => json
+  else
+    resp = RestClient.post "#{jenkins_job_url}/build?token=#{jenkins_token}", :json => json
+  end
   # Build url
   build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
 
@@ -63,7 +66,10 @@ post '/' do
   slack_webhook_url = ENV['SLACK_WEBHOOK_URL']
   if slack_webhook_url
     notifier = Slack::Notifier.new slack_webhook_url
-    notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
+    if parameters
+      notifier.ping "Started job '#{job}' - #{build_url} with parameters: #{parameters} for #{user_name}"
+    else
+      notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
   end
 
   build_url
