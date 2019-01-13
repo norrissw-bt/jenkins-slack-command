@@ -66,7 +66,8 @@ To call this from Slack, all you need to do is send `/jenkins MyAwesomeApp lane=
 
 ## Author
 
-Josh Holtz, me@joshholtz.com, [@joshdholtz](https://twitter.com/joshdholtz)
+Forked from original work by: Josh Holtz, me@joshholtz.com, [@joshdholtz](https://twitter.com/joshdholtz)
+
 Modified for Bluetent by Shaun Norris, shaun@bluetent.com
 
 ## License
