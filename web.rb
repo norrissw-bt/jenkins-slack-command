@@ -48,18 +48,18 @@ post '/' do
   #logger.info( next_build_number ) #debug
   # Make jenkins request
   json = JSON.generate( { "" => "" } )
-  logger.info( json) #debug
+  #logger.info( json) #debug
   logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''))#debug
   resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''), :json => json
   puts resp
   # Build url
   build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
-  
+
   user_name = params['user_name']
   slack_webhook_url = ENV['SLACK_WEBHOOK_URL']
   if slack_webhook_url
     notifier = Slack::Notifier.new slack_webhook_url
-    notifier.ping "Started job '#{job}' - #{build_url} for @#{user_name}"
+    notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
   end
 
   build_url
