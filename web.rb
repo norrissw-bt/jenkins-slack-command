@@ -24,12 +24,12 @@ post '/' do
 
   # Split command text
   logger.info(params['text'])
-  puts params['text']
-  puts params
+  # puts params['text']
+  # puts params
   args = params['text']
   text_parts = args.split(' ')
-  puts "args", args
-  puts "text_parts", text_parts
+  # puts "args", args
+  # puts "text_parts", text_parts
   # Split command text - job
   job = text_parts[0]
 
@@ -37,15 +37,15 @@ post '/' do
   parameters = text_parts[1..-1].map(&:inspect).join('&')
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
-  logger.info( jenkins_job_url) #debug
+  #logger.info( jenkins_job_url) #debug
 
   # Get next jenkins job build number
   resp = RestClient.get "#{jenkins_job_url}/api/json"
-  logger.info( resp) #debug
+  #logger.info( resp) #debug
   resp_json = JSON.parse( resp.body )
-  logger.info( resp_json) #debug
+  #logger.info( resp_json) #debug
   next_build_number = resp_json['nextBuildNumber']
-  logger.info( next_build_number ) #debug
+  #logger.info( next_build_number ) #debug
   # Make jenkins request
   json = JSON.generate( { "" => "" } )
   logger.info( json) #debug
@@ -54,11 +54,12 @@ post '/' do
   puts resp
   # Build url
   build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
-
+  
+  user_name = params['user_name']
   slack_webhook_url = ENV['SLACK_WEBHOOK_URL']
   if slack_webhook_url
     notifier = Slack::Notifier.new slack_webhook_url
-    notifier.ping "Started job '#{job}' - #{build_url}"
+    notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
   end
 
   build_url
