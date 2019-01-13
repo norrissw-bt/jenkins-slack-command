@@ -24,34 +24,38 @@ post '/' do
 
   # Split command text
   logger.info(params['text'])
-  # puts params['text']
-  # puts params
   args = params['text']
   text_parts = args.split(' ')
-  # puts "args", args
-  # puts "text_parts", text_parts
+
   # Split command text - job
   job = text_parts[0]
 
+  #format parameters (all our parameters need to be capitalize like MONIKER=abc)
+  formatted_params = []
+  text_parts.each{ |params|  
+                 var = /(.*=)/.match(params)[0].upcase 
+                 par = /=(.*)/.match(params)[0]
+                 formatted_params << var + par.tr('=','') }
+
   # Split command text - parameters
-  parameters = text_parts[1..-1].map(&:inspect).join('&')
+  parameters = formatted_params[1..-1].map(&:inspect).join('&').tr('"','')
+
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
   #logger.info( jenkins_job_url) #debug
 
   # Get next jenkins job build number
   resp = RestClient.get "#{jenkins_job_url}/api/json"
-  #logger.info( resp) #debug
   resp_json = JSON.parse( resp.body )
-  #logger.info( resp_json) #debug
+
   next_build_number = resp_json['nextBuildNumber']
-  #logger.info( next_build_number ) #debug
+  
   # Make jenkins request
   json = JSON.generate( { "" => "" } )
-  #logger.info( json) #debug
-  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''))#debug
-  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}".tr('"',''), :json => json
-  puts resp
+
+  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
+  resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}", :json => json
+
   # Build url
   build_url = "https://ci.rescmshost.com/job/#{job}/#{next_build_number}"
 
