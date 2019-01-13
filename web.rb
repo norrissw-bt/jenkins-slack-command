@@ -38,7 +38,7 @@ post '/' do
                  formatted_params << var + par.tr('=','') }
 
   # Split command text - parameters
-  parameters = formatted_params[1..-1].map(&:inspect).join('&').tr('"','')
+  parameters = formatted_params.map(&:inspect).join('&').tr('"','')
 
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
