@@ -27,14 +27,13 @@ post '/' do
   args = params['text']
   text_parts = args.split(' ')
 
-  # Split command text - job
+  # Slice out the job name 
   job = text_parts[0]
 
   #format parameters (all our parameters need to be capitalize like MONIKER=abc)
   formatted_params = []
   text_parts.each{ |p|  var = /(.*=)/.match(p)[0].upcase 
-                 par = /=(.*)/.match(p)[0]
-                 formatted_params << var + par.tr('=','') }
+                 formatted_params << var }#+ par.tr('=','') }
 
   # Split command text - parameters
   parameters = formatted_params[1..-1].map(&:inspect).join('&').tr('"','')
