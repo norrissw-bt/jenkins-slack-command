@@ -32,8 +32,7 @@ post '/' do
 
   #format parameters (all our parameters need to be capitalize like MONIKER=abc)
   formatted_params = []
-  text_parts.each{ |p|  
-                 var = /(.*=)/.match(p)[0].upcase 
+  text_parts.each{ |p|  var = /(.*=)/.match(p)[0].upcase 
                  par = /=(.*)/.match(p)[0]
                  formatted_params << var + par.tr('=','') }
 
