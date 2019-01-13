@@ -23,7 +23,7 @@ post '/' do
   #return [401, "No authorized for this command,token:" + slack_token] unless slack_token == params['token']
 
   # Split command text
-  logger.info(params['text'])
+  logger.info(params)
   args = params['text']
   text_parts = args.split(' ')
 
