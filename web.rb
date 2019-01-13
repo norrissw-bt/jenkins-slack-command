@@ -6,7 +6,7 @@ require 'logger'
 $stdout.sync = true
 
 logger = Logger.new(STDOUT)
-logger.level = Logger::DEBUG
+logger.level = Logger::INFO
 
 get '/' do
   "This is a thing"
@@ -23,7 +23,7 @@ post '/' do
   return [401, "Not authorized for this command, must use slack to initiate builds."] unless slack_token == params['token']
 
   # Split command text
-  logger.info(params)
+  logger.debug(params)
   args = params['text']
   text_parts = args.split(' ')
 
@@ -42,7 +42,7 @@ post '/' do
   end
   # Jenkins url
   jenkins_job_url = "#{jenkins_url}/job/#{job}"
-  #logger.info( jenkins_job_url) #debug
+  logger.debug( jenkins_job_url) #debug
 
   # Get next jenkins job build number
   resp = RestClient.get "#{jenkins_job_url}/api/json"
@@ -53,7 +53,7 @@ post '/' do
   # Make jenkins request
   json = JSON.generate( { "" => "" } )
 
-  logger.info( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
+  logger.debug( "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}")#debug
   if parameters
     resp = RestClient.post "#{jenkins_job_url}/buildWithParameters?token=#{jenkins_token}&#{parameters}", :json => json
   else
