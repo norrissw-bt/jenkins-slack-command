@@ -59,7 +59,7 @@ post '/' do
   slack_webhook_url = ENV['SLACK_WEBHOOK_URL']
   if slack_webhook_url
     notifier = Slack::Notifier.new slack_webhook_url
-    notifier.ping "Started job '#{job}' - #{build_url} for #{user_name}"
+    notifier.ping "Started job '#{job}' - #{build_url} for @#{user_name}"
   end
 
   build_url
